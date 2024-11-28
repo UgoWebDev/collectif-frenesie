@@ -1,0 +1,5 @@
+{"properties": [{
+  "name": "spring.security.session.tracking-modes",
+  "type": "java.lang.String",
+  "description": "A description for 'spring.security.session.tracking-modes'"
+}]}

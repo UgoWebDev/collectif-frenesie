@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" 
+      th:replace="~{layout/base :: base(title='Frénésie Collectif - Accueil', content=~{::main})}">
+<head>
+    <title>Frénésie Collectif - Accueil</title>
+</head>
+<body>
+    <main class="container mt-5">
+        <section class="hero text-center">
+            <h1 class="display-4">Frénésie Collectif</h1>
+            <p class="lead">Découvrez notre univers musical</p>
+        </section>
+
+        <section class="artistes mt-5">
+            <h2>Nos Artistes</h2>
+            <div class="row" th:if="${not #lists.isEmpty(artistes)}">
+                <div class="col-md-4 mb-4" th:each="artiste : ${artistes}">
+                    <div class="card">
+                        <div class="card-body">
+                            <h5 class="card-title" th:text="${artiste.nom}">Nom Artiste</h5>
+                            <p class="card-text" th:text="${artiste.genre}">Genre</p>
+                            <a th:href="@{/artistes/{id}(id=${artiste.id})}" class="btn btn-primary">Voir Profil</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="evenements mt-5">
+            <h2>Prochains Événements</h2>
+            <div class="row" th:if="${not #lists.isEmpty(evenements)}">
+                <div class="col-md-4 mb-4" th:each="evenement : ${evenements}">
+                    <div class="card">
+                        <div class="card-body">
+                            <h5 class="card-title" th:text="${evenement.nom}">Nom Événement</h5>
+                            <p class="card-text">
+                                <i class="fas fa-calendar"></i> 
+                                <span th:text="${#temporals.format(evenement.dateDebut, 'dd/MM/yyyy HH:mm')}">Date</span>
+                            </p>
+                            <a th:href="@{/evenements/{id}(id=${evenement.id})}" class="btn btn-primary">Détails</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+</body>
+</html>

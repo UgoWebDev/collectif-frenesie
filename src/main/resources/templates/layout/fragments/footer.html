@@ -1,0 +1,15 @@
+<div th:fragment="footer">
+    <footer class="bg-dark text-white py-4">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-6">
+                    <p>&copy; <span th:text="${#dates.format(#dates.createNow(), 'yyyy')}"></span> Frénésie Collectif. All rights reserved.</p>
+                </div>
+                <div class="col-md-6 text-md-right">
+                    <a href="/terms" class="text-white">Terms & Conditions</a> |
+                    <a href="/privacy" class="text-white">Privacy Policy</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+</div>
