@@ -21,22 +21,22 @@ public class SecurityConfig {
                 .sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED)
                 .maximumSessions(1)
                 .maxSessionsPreventsLogin(true)
-                .sessionRegistry(sessionRegistry)
+                .sessionRegistry(sessionRegistry) // Use the injected sessionRegistry
             )
             .authorizeHttpRequests(authorize -> authorize
-                .requestMatchers("/", "/home", "/register", "/login").permitAll() // Permet l'accès libre à /home, /register et /login
-                .requestMatchers("/admin/**").hasRole("ADMIN") // Pages admin nécessitent un rôle ADMIN
-                .requestMatchers("/user/**").hasRole("USER")   // Pages utilisateur nécessitent un rôle USER
-                .anyRequest().authenticated() // Toute autre page requiert une authentification
+                .requestMatchers("/", "/home", "/login", "/register").permitAll()  // Accès libre à /home
+                .requestMatchers("/admin/**").hasRole("ADMIN")  // Accès aux pages admin avec rôle ADMIN
+                .requestMatchers("/user/**").hasRole("USER")   // Accès aux pages utilisateur avec rôle USER
+                .anyRequest().authenticated()  // Toutes les autres pages nécessitent une authentification
             )
             .formLogin(form -> form
-                .loginPage("/login")
-                .defaultSuccessUrl("/home", true)  // Rediriger vers /home après la connexion
-                .permitAll()
+                .loginPage("/login")  // Page de connexion personnalisée
+                .defaultSuccessUrl("/home", true)  // Redirige vers /home après une connexion réussie
+                .permitAll()  // Permet à tout le monde d'accéder à la page de connexion
             )
             .logout(logout -> logout
-                .logoutSuccessUrl("/home")  // Rediriger vers /home après la déconnexion
-                .permitAll()
+                .logoutSuccessUrl("/home")  // Redirige vers /home après la déconnexion
+                .permitAll()  // Permet à tout le monde d'accéder à la déconnexion
             );
 
         return http.build();
@@ -44,7 +44,7 @@ public class SecurityConfig {
 
     @Bean
     public SessionRegistry sessionRegistry() {
-        return new SessionRegistryImpl();
+        return new SessionRegistryImpl(); // Create and return SessionRegistry
     }
 
     @Bean

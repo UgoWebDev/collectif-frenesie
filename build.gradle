@@ -40,7 +40,7 @@ dependencies {
 	//runtimeOnly 'org.postgresql:postgresql'
 	
 	// SoundCloud API (Vous devrez ajuster selon l'API disponible)
-    //implementation 'com.soundcloud:api:1.0.0' // Version à vérifier
+    //implementation 'com.soundcloud:api:1.0.0' 
 
 	//Tests
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'

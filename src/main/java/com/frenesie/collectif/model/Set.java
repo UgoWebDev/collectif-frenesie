@@ -21,6 +21,10 @@ public class Set {
     private LocalDateTime datePerformance;
 
     @ManyToOne
+    @JoinColumn(name = "collectif_id", nullable = false)
+    private Collectif collectif;
+    
+    @ManyToOne
     @JoinColumn(name = "artiste_id")
     private Artiste artiste;
 }

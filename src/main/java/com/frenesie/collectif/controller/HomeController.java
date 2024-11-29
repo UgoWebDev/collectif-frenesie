@@ -1,11 +1,11 @@
 package com.frenesie.collectif.controller;
 
 import com.frenesie.collectif.model.Artiste;
-import com.frenesie.collectif.model.Artiste.Genre;
 import com.frenesie.collectif.model.Evenement;             
 import com.frenesie.collectif.service.ArtisteService;      
 import com.frenesie.collectif.service.EvenementService;   
-import org.springframework.ui.Model;                       
+import org.springframework.ui.Model;
+import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import lombok.RequiredArgsConstructor;
@@ -13,6 +13,7 @@ import lombok.RequiredArgsConstructor;
 import java.util.List; 
 
 @Controller
+@Primary
 @RequiredArgsConstructor
 public class HomeController {
 	
@@ -33,14 +34,9 @@ public class HomeController {
         // Récupérer les événements à venir
         List<Evenement> evenements = evenementService.getAllEvenements();
         
-        model.addAttribute("artistes", artisteService.findArtistesByGenre(Genre.TECHNO));
-        model.addAttribute("evenements", evenementService.getAllEvenements());
+        model.addAttribute("artistes", artistes);
+        model.addAttribute("evenements", evenements);
         
         return "home";
-    }
-    
-    @GetMapping("/register")
-    public String showRegistrationForm(Model model) {
-        return "register";  // Renvoie la vue "register.html" pour l'inscription
     }
 }

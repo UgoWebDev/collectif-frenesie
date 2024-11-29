@@ -10,5 +10,6 @@ import com.frenesie.collectif.model.Utilisateur;
 
 public interface UtilisateurRepository extends JpaRepository<Utilisateur, Long> {
     Optional<Utilisateur> findByEmail(String email);
-    List<Utilisateur> findByRolesContaining(Role role);
+    boolean existsByEmail(String email);
+    List<Utilisateur> findByRoleContaining(Role role);
 }
