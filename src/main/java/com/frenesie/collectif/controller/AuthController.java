@@ -9,7 +9,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.frenesie.collectif.controller.dto.RegistrationDto;
-import com.frenesie.collectif.service.UtilisateurService;
+import com.frenesie.collectif.model.User;
+import com.frenesie.collectif.service.UserService;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -18,19 +19,16 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class AuthController {
 	
-    private final UtilisateurService utilisateurService;
-
-    public AuthController(UtilisateurService utilisateurService) {
-        this.utilisateurService = utilisateurService;
-    }
+    private final UserService userService;
     
     @GetMapping("/register")
-    public String pageInscription(){
+    public String showRegistrationForm(Model model) {
+        model.addAttribute("user", new User());
         return "auth/register";
     }
 
     @PostMapping("/register")
-    public String register(@Valid @ModelAttribute("utilisateur") RegistrationDto dto,
+    public String register(@Valid @ModelAttribute("user") RegistrationDto dto,
                             BindingResult result,
                             RedirectAttributes redirectAttributes) {
         if (result.hasErrors()) {
@@ -38,7 +36,7 @@ public class AuthController {
         }
 
         try {
-            utilisateurService.register(dto);
+            userService.register(dto);
             redirectAttributes.addFlashAttribute("successMessage", "Inscription réussie");
             return "redirect:/home";
         } catch (RuntimeException e) {
@@ -49,6 +47,6 @@ public class AuthController {
 
     @GetMapping("/login")
     public String login() {
-        return "auth/home";
+        return "auth/login";
     }
 }

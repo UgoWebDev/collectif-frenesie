@@ -1,17 +1,21 @@
 package com.frenesie.collectif.repository;
 
-import com.frenesie.collectif.model.Artiste;
+import com.frenesie.collectif.model.Artist;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
 @Repository
-public interface ArtisteRepository extends JpaRepository<Artiste, Long> {
+public interface ArtistRepository extends JpaRepository<Artist, Integer> {
     
     // Méthode personnalisée pour vérifier l'existence d'un artiste par son nom
-    boolean existsByNom(String nom);
+    boolean existsByName(String name);
+   
     
     // Méthode pour trouver les artistes par genre
-    List<Artiste> findByGenre(Artiste.Genre genre);
+    List<Artist> findByGenre(Artist genre);
+
+
+    
 }

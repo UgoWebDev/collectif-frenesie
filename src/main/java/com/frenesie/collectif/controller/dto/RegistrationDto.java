@@ -7,15 +7,15 @@ import lombok.Data;
 
 @Data
 public class RegistrationDto {
-    @NotBlank(message = "Le nom est requis")
-    private String nom;
+    @NotBlank(message = "Un nom d'utilisateur est requis")
+    private String username;
 
-    public String getNom() {
-		return nom;
+    public String getUsername() {
+		return username;
 	}
 
-	public void setNom(String nom) {
-		this.nom = nom;
+	public void setUsername(String username) {
+		this.username = username;
 	}
 
 	@NotBlank(message = "L'email est requis")
@@ -30,15 +30,15 @@ public class RegistrationDto {
 		this.email = email;
 	}
 
-	@NotBlank(message = "Le mot de passe est requis")
+	@NotBlank(message = "Un mot de passe est requis")
     @Size(min = 8, message = "Le mot de passe doit contenir au moins 8 caractères")
-    private String motDePasse;
+    private String password;
 
-	public String getMotDePasse() {
-		return motDePasse;
+	public String getPassword() {
+		return password;
 	}
 
-	public void setMotDePasse(String motDePasse) {
-		this.motDePasse = motDePasse;
+	public void setPassword(String password) {
+		this.password = password;
 	}
 }

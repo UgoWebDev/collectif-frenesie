@@ -3,8 +3,8 @@ package com.frenesie.collectif.repository;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
-import com.frenesie.collectif.model.Evenement;
+import com.frenesie.collectif.model.Event;
 
 @Repository
-public interface EvenementRepository extends JpaRepository<Evenement, Long> {
+public interface EventRepository extends JpaRepository<Event, Long> {
 }

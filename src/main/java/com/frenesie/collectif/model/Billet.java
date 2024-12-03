@@ -23,11 +23,11 @@ public class Billet {
 
     @ManyToOne
     @JoinColumn(name = "evenement_id")
-    private Evenement evenement;
+    private Event event;
 
     @ManyToOne
     @JoinColumn(name = "utilisateur_id")
-    private Utilisateur utilisateur;
+    private User utilisateur;
 
     public enum Statut {
         DISPONIBLE, RESERVE, VENDU, UTILISE

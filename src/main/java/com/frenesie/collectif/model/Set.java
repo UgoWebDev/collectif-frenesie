@@ -26,5 +26,5 @@ public class Set {
     
     @ManyToOne
     @JoinColumn(name = "artiste_id")
-    private Artiste artiste;
+    private Artist artist;
 }

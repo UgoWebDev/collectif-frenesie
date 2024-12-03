@@ -1,0 +1,13 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Détails de l'Artiste</title>
+</head>
+<body>
+    <h1 th:text="${artist.name}">Nom de l'artiste</h1>
+    <p th:text="${artist.description}">Description de l'artiste</p>
+    <p th:text="${artist.genre}">Genre musical</p>
+    <img th:src="${artist.imageUrl}" alt="Image de l'artiste" />
+    <a href="/artists">Retour à la liste</a>
+</body>
+</html>
