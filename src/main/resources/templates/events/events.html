@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{layout/base :: base(~{::title}, ~{::main})}">
+<head>
+    <title>Liste des Artistes</title>
+</head>
+<body>
+	<main class="container mt-5">
+        <div class="row justify-content-center">
+				<div class="upcoming-events col-md-6">
+				    <h2>Upcoming Events</h2>
+				    <div th:each="event : ${upcomingEvents.content}">
+				        <!-- Carousel and event details -->
+				    </div>
+				</div>
+				
+				<div class="past-events">
+				    <h2>Past Events</h2>
+				    <div th:each="event : ${pastEvents.content}">
+				        <!-- Event details with scroll -->
+				    </div>
+				    <!-- Implement scroll pagination -->
+				</div>    
+            </div>
+    </main>
+
+
+</body>
+</html>

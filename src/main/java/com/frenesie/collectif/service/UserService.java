@@ -5,19 +5,28 @@ import com.frenesie.collectif.model.User;
 import com.frenesie.collectif.repository.UserRepository;
 
 import jakarta.transaction.Transactional;
+import lombok.RequiredArgsConstructor;
 
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 @Service
+@RequiredArgsConstructor
 public class UserService {
 
     private final UserRepository userRepository;
+    private final PasswordEncoder passwordEncoder;
     
-    public UserService(UserRepository userRepository, PasswordEncoder passwordEncoder) {
-        this.userRepository = userRepository;
+    public User authenticate(String email, String rawPassword) {
+        User user = userRepository.findByEmail(email)
+                .orElseThrow(() -> new RuntimeException("Utilisateur non trouvé"));
+        
+        if (!passwordEncoder.matches(rawPassword, user.getPassword())) {
+            throw new RuntimeException("Email ou mot de passe incorrect");
+        }
+        
+        return user;
     }
-
     
     @Transactional
     public void register(RegistrationDto dto) {
@@ -30,7 +39,7 @@ public class UserService {
         User user = User.builder()
                 .username(dto.getUsername())
                 .email(dto.getEmail())
-                .password(dto.getPassword()) // Changement : on passe le mot de passe non haché
+                .password(passwordEncoder.encode(dto.getPassword())) // Encode password here
                 .role("USER") // Ajout explicite du rôle
                 .build();
 

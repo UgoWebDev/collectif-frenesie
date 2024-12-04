@@ -4,12 +4,15 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import lombok.NoArgsConstructor;
 
 @Data
 @Builder
+@NoArgsConstructor
+@AllArgsConstructor
 @Entity
 @Table(name = "users")
 public class User {
@@ -36,24 +39,4 @@ public class User {
     @Column(nullable = false)
     @NotBlank(message = "Le rôle est obligatoire")
     private String role;
-
-    // Constructeur sans argument explicite
-    public User() {
-        this.role = "USER";  // Valeur par défaut pour le rôle
-    }
-    
-    // Constructor with arguments (explicit)
-    public User(Integer id, String username, String password, String email, String role) {
-        this.id = id;
-        this.username = username;
-        this.password = password;
-        this.email = email;
-        this.role = (role != null) ? role : "USER";  // Définit un rôle par défaut si aucun rôle n'est donné
-    }
-
-    // Méthode pour hacher le mot de passe avant de l'enregistrer
-    public void setPassword(String password) {
-        BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
-        this.password = passwordEncoder.encode(password); // Mot de passe haché avant de le stocker
-    }
 }

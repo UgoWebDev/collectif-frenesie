@@ -1,19 +1,28 @@
 package com.frenesie.collectif.service;
 
+import com.frenesie.collectif.exception.ResourceNotFoundException;
 import com.frenesie.collectif.model.Event;
 import com.frenesie.collectif.repository.EventRepository;
+
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class EventServiceImpl implements EventService {
+    @Autowired
+    private EventRepository eventRepository;
 
-    private final EventRepository eventRepository;
+    @Override
+    public Event createEvent(Event event) {
+        return eventRepository.save(event);
+    }
 
-    public EventServiceImpl(EventRepository eventRepository) {
-        this.eventRepository = eventRepository;
+    @Override
+    public Event getEventById(Long id) {
+        return eventRepository.findById(id)
+            .orElseThrow(() -> new ResourceNotFoundException("Event not found"));
     }
 
     @Override
@@ -22,17 +31,20 @@ public class EventServiceImpl implements EventService {
     }
 
     @Override
-    public Optional<Event> getEventById(Long id) {
-        return eventRepository.findById(id);
-    }
-
-    @Override
-    public Event saveEvent(Event event) {
+    public Event updateEvent(Long id, Event eventDetails) {
+        Event event = getEventById(id);
+        event.setTitle(eventDetails.getTitle());
+        event.setLocation(eventDetails.getLocation());
+        event.setDescription(eventDetails.getDescription());
+        event.setStartTime(eventDetails.getStartTime());
+        event.setEndTime(eventDetails.getEndTime());
+        event.setImageUrls(eventDetails.getImageUrls());
         return eventRepository.save(event);
     }
 
     @Override
     public void deleteEvent(Long id) {
-        eventRepository.deleteById(id);
+        Event event = getEventById(id);
+        eventRepository.delete(event);
     }
 }

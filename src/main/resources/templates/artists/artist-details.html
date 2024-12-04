@@ -1,13 +1,21 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org"
+	  th:replace="~{layout/base :: base(~{::title}, ~{::main})}">
 <head>
-    <title>Détails de l'Artiste</title>
+    <title >Détails de l'Artiste</title>
 </head>
 <body>
-    <h1 th:text="${artist.name}">Nom de l'artiste</h1>
-    <p th:text="${artist.description}">Description de l'artiste</p>
-    <p th:text="${artist.genre}">Genre musical</p>
-    <img th:src="${artist.imageUrl}" alt="Image de l'artiste" />
-    <a href="/artists">Retour à la liste</a>
+    <main class="container mt-5">
+        <div class="row justify-content-center">
+            <div class="col-md-6">
+                <h1 th:text="${artist.name}">Nom de l'artiste</h1>
+    			<p th:text="${artist.description}">Description de l'artiste</p>
+    			<p th:text="${artist.genre}">Genre musical</p>
+    			<img th:src="${artist.imageUrl}" alt="Image de l'artiste" />
+    			<a href="/artists">Retour à la liste</a>
+            </div>
+        </div>
+    </main>
+
 </body>
 </html>

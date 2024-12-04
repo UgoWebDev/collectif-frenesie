@@ -22,20 +22,30 @@ public class Event {
 
     @Column(nullable = false)
     @NotBlank(message = "Le nom de l'événement est requis")
-    private String name;
-
+    private String title;
+    
     @Column(nullable = false)
+    private String location;
+    
+    @Column(nullable = false, length = 100)
     private String description;
+    
+    @ElementCollection
+    private List<String> imageUrls;
 
     @Column(nullable = false)
     @Future(message = "La date de début doit être dans le futur")
-    private LocalDateTime timeSet;
+    private LocalDateTime startTime;
 
     @Column(nullable = false)
-    private LocalDateTime timeEnd;
+    private LocalDateTime endTime;
+    
+//    @Column(nullable = false)
+//    private LocalDateTime eventDate;
+//
+//    @Column(nullable = false)
+//    private LocalDateTime createdAt;
 
-    @Column(nullable = false)
-    private String place;
 
     @Enumerated(EnumType.STRING)
     private Statut status;
