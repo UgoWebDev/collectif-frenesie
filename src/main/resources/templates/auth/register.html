@@ -12,18 +12,18 @@
                 <form th:action="@{/register}" th:object="${user}" method="post">
                     <div class="mb-3">
                         <label class="form-label">Nom</label>
-                        <input type="text" class="form-control" th:field="*{username}">
-                        <small class="text-danger" th:if="${#fields.hasErrors('username')}" th:errors="*{username}"></small>
+                        <input type="text" class="form-control" th:field="*{username}" placeholder="Nom d'utilisateur">
+                        <small class="text-danger" th:if="${#fields.hasErrors('username')}" th:errors="*{username}">Nom d'utilisateur invalide</small>
                     </div>
                     <div class="mb-3">
                         <label class="form-label">Email</label>
-                        <input type="email" class="form-control" th:field="*{email}">
-                        <small class="text-danger" th:if="${#fields.hasErrors('email')}" th:errors="*{email}"></small>
+                        <input type="email" class="form-control" th:field="*{email}" placeholder="Email">
+                        <small class="text-danger" th:if="${#fields.hasErrors('email')}" th:errors="*{email}">Email invalide</small>
                     </div>
                     <div class="mb-3">
                         <label class="form-label">Mot de passe</label>
-                        <input type="password" class="form-control" th:field="*{password}">
-                        <small class="text-danger" th:if="${#fields.hasErrors('password')}" th:errors="*{password}"></small>
+                        <input type="password" class="form-control" th:field="*{password}" placeholder="Mot de passe">
+                        <small class="text-danger" th:if="${#fields.hasErrors('password')}" th:errors="*{password}">Mot de passe invalide</small>
                     </div>
                     <button type="submit" class="btn btn-primary">S'inscrire</button>
                 </form>

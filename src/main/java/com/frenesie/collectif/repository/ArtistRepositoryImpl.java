@@ -34,7 +34,7 @@ public abstract class ArtistRepositoryImpl implements ArtistRepository {
 		@Override
 		public Artist mapRow(ResultSet rs, int rowNum) throws SQLException {
 			Artist	artist = new Artist();
-			artist.setId(rs.getLong("id"));
+			artist.setId((int) rs.getLong("id"));
 			artist.setName(rs.getString("name"));
 			artist.setGenre(rs.getString("genre"));
 

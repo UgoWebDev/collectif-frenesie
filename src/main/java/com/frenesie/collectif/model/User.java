@@ -36,7 +36,8 @@ public class User {
     @Email(message = "Format d'email invalide")
     private String email;
 
+    @Enumerated(EnumType.STRING)
     @Column(nullable = false)
-    @NotBlank(message = "Le rôle est obligatoire")
-    private String role;
+    private Role role;
+    
 }

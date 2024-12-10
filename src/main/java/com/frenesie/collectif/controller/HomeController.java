@@ -3,7 +3,8 @@ package com.frenesie.collectif.controller;
 import com.frenesie.collectif.model.Artist;
 import com.frenesie.collectif.model.Event;
 import com.frenesie.collectif.service.ArtistService;      
-import com.frenesie.collectif.service.EventService;   
+import com.frenesie.collectif.service.EventService;
+
 import org.springframework.ui.Model;
 import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Controller;
@@ -28,7 +29,7 @@ public class HomeController {
         // Récupérer les événements à venir
         List<Event> events = eventService.getAllEvents();
         
-        model.addAttribute("artistes", artists);
+        model.addAttribute("artists", artists);
         model.addAttribute("events", events);
         
         return "home";

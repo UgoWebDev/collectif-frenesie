@@ -2,8 +2,10 @@ package com.frenesie.collectif.model;
 
 import jakarta.persistence.*;
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.AssertTrue;
 import jakarta.validation.constraints.Future;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -25,9 +27,11 @@ public class Event {
     private String title;
     
     @Column(nullable = false)
+    @NotBlank(message = "Le Lieu de l'événement est requis")
     private String location;
     
     @Column(nullable = false, length = 100)
+    @Size(max = 500, message = "La description ne peut pas dépasser 500 caractères")
     private String description;
     
     @ElementCollection
@@ -39,16 +43,10 @@ public class Event {
 
     @Column(nullable = false)
     private LocalDateTime endTime;
-    
-//    @Column(nullable = false)
-//    private LocalDateTime eventDate;
-//
-//    @Column(nullable = false)
-//    private LocalDateTime createdAt;
 
 
     @Enumerated(EnumType.STRING)
-    private Statut status;
+    private Status status;
 
     @ManyToMany
     @JoinTable(
@@ -61,7 +59,12 @@ public class Event {
     @OneToMany(mappedBy = "event", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Billet> billets;
 
-    public enum Statut {
+    public enum Status {
         PLANNED, RUNNING, ENDED, CANCELED
+    }
+    
+    @AssertTrue(message = "La date de fin doit être après la date de début")
+    public boolean isValidTimeRange() {
+        return startTime == null || endTime == null || endTime.isAfter(startTime);
     }
 }

@@ -1,43 +1,52 @@
 package com.frenesie.collectif.config;
 
+import java.io.IOException;
+
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.session.SessionRegistry;
 import org.springframework.security.core.session.SessionRegistryImpl;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import org.springframework.security.web.authentication.session.RegisterSessionAuthenticationStrategy;
 import org.springframework.security.web.authentication.session.SessionAuthenticationStrategy;
 
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+import lombok.RequiredArgsConstructor;
+
 @Configuration
 @EnableWebSecurity
+@RequiredArgsConstructor
 public class SecurityConfig {
 	
-    @Bean
-    PasswordEncoder passwordEncoder() {
-        return new BCryptPasswordEncoder();
-    }
-    
-    @Bean
-    SessionRegistry sessionRegistry() {
-        return new SessionRegistryImpl();
-    }
-
-    @Bean
-    SessionAuthenticationStrategy sessionAuthenticationStrategy() {
-        return new RegisterSessionAuthenticationStrategy(sessionRegistry());
-    }
+    private final AuthenticationSuccessHandler authenticationSuccessHandler = new AuthenticationSuccessHandler() {
+        @Override
+        public void onAuthenticationSuccess(HttpServletRequest request, 
+                                            HttpServletResponse response, 
+                                            Authentication authentication) throws IOException {
+            boolean isAdmin = authentication.getAuthorities().stream()
+                .anyMatch(grantedAuthority -> grantedAuthority.getAuthority().equals("ROLE_ADMIN"));
+            
+            if (isAdmin) {
+                response.sendRedirect("/admin/dashboard");
+            } else {
+                response.sendRedirect("/home");
+            }
+        }
+    };
 
     @Bean
     SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         return http
-            .csrf(csrf -> csrf.disable())
-            .authorizeHttpRequests(auth -> auth
+            .authorizeHttpRequests(authz -> authz
                 // Pages publiques accessibles à tous
                 .requestMatchers("/", "/home", "/events", "/sets", "/artists", "/ticketing").permitAll()
                 // Pages d'authentification
@@ -57,8 +66,8 @@ public class SecurityConfig {
                 .loginPage("/login")
                 .loginProcessingUrl("/login")
                 .usernameParameter("email")
-                .defaultSuccessUrl("/", false)  // Change to false
-                .failureUrl("/login?error=true")
+                .successHandler(authenticationSuccessHandler) 
+//                .failureUrl("/login?error=true")
                 .permitAll()
             )
             .logout(logout -> logout
@@ -68,6 +77,27 @@ public class SecurityConfig {
             )
             .build();
     }
+    
+    @Bean
+    PasswordEncoder passwordEncoder() {
+        return new BCryptPasswordEncoder();
+    }
+    
+    @Bean
+    SessionRegistry sessionRegistry() {
+        return new SessionRegistryImpl();
+    }
+
+//    @Bean
+//    SessionAuthenticationStrategy sessionAuthenticationStrategy() {
+//        return new RegisterSessionAuthenticationStrategy(sessionRegistry());
+//    }
+    
+    @Bean
+    SessionAuthenticationStrategy sessionAuthenticationStrategy() {
+        return new RegisterSessionAuthenticationStrategy(sessionRegistry());
+    }
+
     
 
     @Bean

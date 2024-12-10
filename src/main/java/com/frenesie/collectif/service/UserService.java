@@ -1,16 +1,21 @@
 package com.frenesie.collectif.service;
 
 import com.frenesie.collectif.controller.dto.RegistrationDto;
+import com.frenesie.collectif.model.Role;
 import com.frenesie.collectif.model.User;
 import com.frenesie.collectif.repository.UserRepository;
 
 import jakarta.transaction.Transactional;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 
+import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 @Service
+@Valid
 @RequiredArgsConstructor
 public class UserService {
 
@@ -19,10 +24,10 @@ public class UserService {
     
     public User authenticate(String email, String rawPassword) {
         User user = userRepository.findByEmail(email)
-                .orElseThrow(() -> new RuntimeException("Utilisateur non trouvé"));
+                .orElseThrow(() -> new UsernameNotFoundException("Utilisateur non trouvé"));
         
         if (!passwordEncoder.matches(rawPassword, user.getPassword())) {
-            throw new RuntimeException("Email ou mot de passe incorrect");
+            throw new BadCredentialsException("Email ou mot de passe incorrect");
         }
         
         return user;
@@ -36,11 +41,18 @@ public class UserService {
         }
 
         // Créer l'utilisateur avec un rôle "USER" par défaut
+        Role role;
+        try {
+            role = dto.getRole() != null ? Role.valueOf(dto.getRole().toUpperCase()) : Role.USER;  // Convertir le rôle en majuscules
+        } catch (IllegalArgumentException e) {
+            throw new IllegalArgumentException("Rôle invalide : " + dto.getRole());
+        }
+        
         User user = User.builder()
                 .username(dto.getUsername())
                 .email(dto.getEmail())
                 .password(passwordEncoder.encode(dto.getPassword())) // Encode password here
-                .role("USER") // Ajout explicite du rôle
+                .role(role) // Ajout explicite du rôle
                 .build();
 
         // Enregistrer l'utilisateur dans la base de données
@@ -58,5 +70,4 @@ public class UserService {
                 .orElseThrow(() -> new RuntimeException("Utilisateur non trouvé avec cet email."));
     }
 
-    // Autres méthodes de gestion des utilisateurs peuvent être ajoutées ici
 }

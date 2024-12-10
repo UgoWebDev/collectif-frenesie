@@ -11,20 +11,22 @@
             <p class="lead">Découvrez notre univers musical</p>
         </section>
 
-        <section class="artists mt-5">
-            <h2>Nos Artistes</h2>
-            <div class="row" th:if="${not #lists.isEmpty(artists)}">
-                <div class="col-md-4 mb-4" th:each="artist : ${artists}">
-                    <div class="card">
-                        <div class="card-body">
-                            <h5 class="card-title" th:text="${artist.nom}">Nom Artiste</h5>
-                            <p class="card-text" th:text="${artist.genre}">Genre</p>
-                            <a th:href="@{/artists/{id}(id=${artist.id})}" class="btn btn-primary">Voir Profil</a>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section>
+		<section class="artists mt-5">
+		    <h2>Nos Artistes</h2>
+		    <div class="row" th:if="${not #lists.isEmpty(artists)}">
+		        <div class="col-md-3 mb-4" th:each="artist : ${artists}">
+		            <div class="card h-100 shadow-sm">
+<!-- 		                <img th:src="${artist.imageUrl ?: '/images/artist-placeholder.jpg'}" class="card-img-top" alt="Image de l'artiste"> -->
+		                <div class="card-body">
+		                    <h5 class="card-title" th:text="${artist.name}">Nom Artiste</h5>
+		                    <p class="card-text" th:text="${artist.genre}">Genre</p>
+		                    <p class="card-text" th:text="${artist.description}">Biographie</p>
+		                    <a th:href="@{/artists/details/{id}(id=${artist.id})}" class="btn btn-primary">Voir Profil</a>
+		                </div>
+		            </div>
+		        </div>
+		    </div>
+		</section>
 
         <section class="events mt-5">
             <h2>Prochains Événements</h2>
@@ -32,20 +34,17 @@
                 <div class="col-md-4 mb-4" th:each="event : ${events}">
                     <div class="card">
                         <div class="card-body">
-                            <h5 class="card-title" th:text="${event.nom}">Nom Événement</h5>
+                            <h5 class="card-title" th:text="${event.title}">Nom Événement</h5>
                             <p class="card-text">
                                 <i class="fas fa-calendar"></i> 
-                                <span th:text="${#temporals.format(event.timeSet, 'dd/MM/yyyy HH:mm')}">Date</span>
+                                <span th:text="${#temporals.format(event.startTime, 'dd/MM/yyyy HH:mm')}">Date</span>
                             </p>
-                            <a th:href="@{/events/{id}(id=${event.id})}" class="btn btn-primary">Détails</a>
+                            <a th:href="@{/events/details/{id}(id=${event.id})}" class="btn btn-primary">Détails</a>
                         </div>
                     </div>
                 </div>
             </div>
         </section>        
     </main>
-        <li class="nav-item">
-    		<a class="nav-link" th:href="@{/artists/add}">Ajouter un artiste</a>
-		</li>
 </body>
 </html>

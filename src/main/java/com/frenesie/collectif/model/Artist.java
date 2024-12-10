@@ -19,10 +19,11 @@ import java.util.Objects;
 public class Artist {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private Integer id;
 
     @Column(nullable = false)
     @NotBlank(message = "Le name est obligatoire")
+    @Size(min = 2, max = 100, message = "Le nom de l'artiste doit avoir entre 2 et 100 caractères")
     private String name;
 
     @Column(length = 500)
@@ -31,6 +32,14 @@ public class Artist {
 
     @Column(nullable = false)
     private String genre;
+    
+    @ElementCollection
+    @CollectionTable(
+        name = "artist_image_urls",
+        joinColumns = @JoinColumn(name = "artist_id")
+    )
+    @Column(name = "image_url")
+    private List<String> imageUrls;
 
     @OneToMany(mappedBy = "artist", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Set> sets = new ArrayList<>();
