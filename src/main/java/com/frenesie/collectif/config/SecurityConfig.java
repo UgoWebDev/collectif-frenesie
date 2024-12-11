@@ -11,7 +11,7 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.session.SessionRegistry;
 import org.springframework.security.core.session.SessionRegistryImpl;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
@@ -45,8 +45,8 @@ public class SecurityConfig {
 
     @Bean
     SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-        return http
-            .authorizeHttpRequests(authz -> authz
+        http
+            .authorizeHttpRequests(requests -> requests
                 // Pages publiques accessibles à tous
                 .requestMatchers("/", "/home", "/events", "/sets", "/artists", "/ticketing").permitAll()
                 // Pages d'authentification
@@ -62,43 +62,36 @@ public class SecurityConfig {
                 // Toute autre route nécessite une authentification
                 .anyRequest().authenticated()
             )
-            .formLogin(form -> form
+            .formLogin((form) -> form
                 .loginPage("/login")
                 .loginProcessingUrl("/login")
                 .usernameParameter("email")
                 .successHandler(authenticationSuccessHandler) 
-//                .failureUrl("/login?error=true")
+                .failureUrl("/login?error=true")
                 .permitAll()
             )
             .logout(logout -> logout
                 .logoutUrl("/logout")
                 .logoutSuccessUrl("/login?logout=true")  // Added logout parameter
-                .permitAll()
-            )
-            .build();
+                .permitAll());
+            
+            return http.build();
     }
     
     @Bean
     PasswordEncoder passwordEncoder() {
-        return new BCryptPasswordEncoder();
+		return PasswordEncoderFactories.createDelegatingPasswordEncoder();
     }
     
     @Bean
     SessionRegistry sessionRegistry() {
         return new SessionRegistryImpl();
     }
-
-//    @Bean
-//    SessionAuthenticationStrategy sessionAuthenticationStrategy() {
-//        return new RegisterSessionAuthenticationStrategy(sessionRegistry());
-//    }
     
     @Bean
     SessionAuthenticationStrategy sessionAuthenticationStrategy() {
         return new RegisterSessionAuthenticationStrategy(sessionRegistry());
     }
-
-    
 
     @Bean
     AuthenticationManager authenticationManager(

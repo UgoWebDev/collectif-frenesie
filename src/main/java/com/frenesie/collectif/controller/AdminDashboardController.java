@@ -1,6 +1,7 @@
 package com.frenesie.collectif.controller;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -17,6 +18,7 @@ import com.frenesie.collectif.model.Artist;
 import com.frenesie.collectif.model.Event;
 import com.frenesie.collectif.service.ArtistService;
 import com.frenesie.collectif.service.EventService;
+import com.frenesie.collectif.service.SetService;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -29,17 +31,17 @@ public class AdminDashboardController {
 
     private final ArtistService artistService;
     private final EventService eventService;
-//    private final SetService setService;
+    private final SetService setService;
 
     @GetMapping("/dashboard")
     public String getDashboard(Model model) {
-        List<Artist> artists = artistService.findAllArtists();
+        List<Artist> artists = artistService.getAll();
         System.out.println("Artistes récupérés : " + artists);
         model.addAttribute("artists", artists);
 
-        model.addAttribute("artists", artistService.findAllArtists());
-        model.addAttribute("events", eventService.getAllEvents());
-//        model.addAttribute("sets", setService.getAllSets());
+        model.addAttribute("artists", artistService.getAll());
+        model.addAttribute("events", eventService.getAll());
+        model.addAttribute("sets", setService.getAllSets());
         return "admin/dashboard";
     }
 
@@ -51,13 +53,13 @@ public class AdminDashboardController {
 
     @PostMapping("/artists/create")
     public String createArtist(@ModelAttribute Artist artist) {
-        artistService.createArtist(artist);
+        artistService.add(artist);
         return "redirect:/admin/dashboard";
     }
     
     @GetMapping("/edit/{id}")
     public String editArtist(@PathVariable Integer id, Model model) {
-        Artist artist = artistService.getArtistById(id);
+        Optional<Artist> artist = artistService.getById(id);
         model.addAttribute("artist", artist);
         return "admin/edit-artist";
     }
@@ -70,13 +72,13 @@ public class AdminDashboardController {
             return "admin/edit-artist";
         }
         artist.setId(id);
-        artistService.saveArtist(artist);
+        artistService.update(artist);
         return "redirect:/admin/dashboard";
     }
     
     @DeleteMapping("/artists/delete/{id}")
     public String deleteArtist(@PathVariable Integer id, RedirectAttributes redirectAttributes) {
-        artistService.deleteById(id);
+        artistService.delete(id);
         redirectAttributes.addFlashAttribute("message", "L'artiste a été supprimé avec succès.");
         return "redirect:/admin/dashboard";
     }
@@ -90,7 +92,7 @@ public class AdminDashboardController {
 
     @PostMapping("/events/create")
     public String createEvent(@ModelAttribute Event event) {
-        eventService.saveEvent(event);
+        eventService.add(event);
         return "redirect:/admin/dashboard";
     }
 }

@@ -5,6 +5,9 @@ import com.frenesie.collectif.service.ArtistService;
 
 import lombok.RequiredArgsConstructor;
 
+import java.util.List;
+import java.util.Optional;
+
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -16,18 +19,19 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @RequestMapping("/artists")
 public class ArtistController {
 
-    private final ArtistService artistService;
+    private ArtistService artistService;
 
    
     @GetMapping
     public String listArtists(Model model) {
-        model.addAttribute("artists", artistService.findAllArtists());
-        return "artists/list-artists"; // Vue qui affiche tous les artists
+    	List<Artist> artists = artistService.getAll();
+        model.addAttribute("artists", artists);
+        return "artists/list-artists";
     }
     
     @GetMapping("/details/{id}")
-    public String getArtistDetails(@PathVariable(name = "id") Integer artistId, Model model) {
-        Artist artist = artistService.getArtistById(artistId);
+    public String getArtistDetails(@PathVariable(name = "id") int artistId, Model model) {
+        Optional<Artist> artist = artistService.getById(artistId);
         model.addAttribute("artist", artist);
         return "artists/artist-details";
     }

@@ -81,7 +81,7 @@ public class FrenesieAdviceController {
     @ExceptionHandler(ResponseStatusException.class)
     public String handleResponseStatusException(ResponseStatusException ex, Model model) {
         model.addAttribute("message", ex.getReason());
-        return "error"; // Affiche une vue d'erreur générique
+        return "error";
     }
 }
 

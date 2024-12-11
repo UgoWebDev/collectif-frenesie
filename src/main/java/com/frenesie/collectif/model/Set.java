@@ -1,36 +1,34 @@
 package com.frenesie.collectif.model;
 
-import jakarta.persistence.*;
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotBlank;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Data
 @NoArgsConstructor
-@Entity
-@Table(name = "sets")
 @Valid
 public class Set {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+	
+	@NotBlank
     private Integer id;
-
-    @Column(nullable = false)
+	
+	@NotBlank
     private String title;
-
-    private String urlSoundCloud;
-
-    @Column(nullable = false)
-    private LocalDateTime dateSet;
-
-    @ManyToOne
-    @JoinColumn(name = "collectif_id", nullable = false)
+    
+    @NotBlank
     private Collectif collectif;
     
-    @ManyToOne
-    @JoinColumn(name = "artiste_id")
+    @NotBlank
     private Artist artist;
+    
+    private String urlSoundCloud;
+    
+    private LocalDateTime dateSet;
+    
+    private List<Genre> genres;
    
 }

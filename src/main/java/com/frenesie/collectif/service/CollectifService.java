@@ -13,9 +13,4 @@ public class CollectifService {
         this.collectifRepository = collectifRepository;
     }
 
-    public Collectif creerCollectif(Collectif collectif) {
-        // Logique de validation et de création
-        return collectifRepository.save(collectif);
-    }
-
 }

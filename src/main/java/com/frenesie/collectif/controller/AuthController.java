@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.frenesie.collectif.controller.dto.RegistrationDto;
+import com.frenesie.collectif.model.User;
 import com.frenesie.collectif.service.UserService;
 
 import jakarta.validation.Valid;
@@ -27,21 +28,13 @@ public class AuthController {
     }
 
     @PostMapping("/register")
-    public String register(@Valid @ModelAttribute("user") RegistrationDto dto,
-                            BindingResult result,
-                            RedirectAttributes redirectAttributes) {
-        if (result.hasErrors()) {
-            return "auth/register";
-        }
-
-        try {
-            userService.register(dto);
-            redirectAttributes.addFlashAttribute("successMessage", "Inscription réussie");
-            return "redirect:/home";
-        } catch (RuntimeException e) {
-            result.rejectValue("email", "error.user", e.getMessage());
-            return "auth/register";
-        }
+    public String register(Model model, @Valid User user, BindingResult bindingResult) {
+    	model.addAttribute("body", "auth/register");
+    	if(bindingResult.hasErrors()) {
+    		return "home";
+    	}
+    	userService.save(user);
+    	return "home";
     }
 
     @GetMapping("/login")

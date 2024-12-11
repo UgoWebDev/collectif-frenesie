@@ -24,10 +24,10 @@ public class HomeController {
     @GetMapping("/home")
     public String home(Model model) {
         // Récupérer les 3 derniers artistes
-        List<Artist> artists = artistService.findAllArtists();
+        List<Artist> artists = artistService.getAll();
         
         // Récupérer les événements à venir
-        List<Event> events = eventService.getAllEvents();
+        List<Event> events = eventService.getAll();
         
         model.addAttribute("artists", artists);
         model.addAttribute("events", events);
