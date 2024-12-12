@@ -4,6 +4,7 @@ import com.frenesie.collectif.model.Artist;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.context.annotation.Primary;
 import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -15,6 +16,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Repository
+@Primary
 public class ArtistRepositoryJdbcImpl implements ArtistRepository{
 	Logger logger = LoggerFactory.getLogger(ArtistRepositoryJdbcImpl.class);
 
@@ -25,10 +27,6 @@ public class ArtistRepositoryJdbcImpl implements ArtistRepository{
 		this.jdbcTemplate = namedParameterJdbcTemplate.getJdbcTemplate();
 		this.namedParameterJdbcTemplate = namedParameterJdbcTemplate;
 	}
-
-    public ArtistRepositoryJdbcImpl(JdbcTemplate jdbcTemplate) {
-        this.jdbcTemplate = jdbcTemplate;
-    }
 
     @Override
     public void add(Artist newArtist) {

@@ -41,7 +41,7 @@ public class AdminDashboardController {
 
         model.addAttribute("artists", artistService.getAll());
         model.addAttribute("events", eventService.getAll());
-        model.addAttribute("sets", setService.getAllSets());
+        model.addAttribute("sets", setService.getAll());
         return "admin/dashboard";
     }
 

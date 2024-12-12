@@ -8,6 +8,7 @@ import lombok.RequiredArgsConstructor;
 import java.util.List;
 import java.util.Optional;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -15,12 +16,15 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
-@RequiredArgsConstructor
 @RequestMapping("/artists")
 public class ArtistController {
 
     private ArtistService artistService;
 
+    @Autowired
+    public ArtistController(ArtistService artistService) {
+        this.artistService = artistService;
+    }
    
     @GetMapping
     public String listArtists(Model model) {
@@ -30,8 +34,8 @@ public class ArtistController {
     }
     
     @GetMapping("/details/{id}")
-    public String getArtistDetails(@PathVariable(name = "id") int artistId, Model model) {
-        Optional<Artist> artist = artistService.getById(artistId);
+    public String getArtistDetails(@PathVariable(name = "id") int id, Model model) {
+        Optional<Artist> artist = artistService.getById(id);
         model.addAttribute("artist", artist);
         return "artists/artist-details";
     }

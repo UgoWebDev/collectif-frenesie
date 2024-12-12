@@ -8,13 +8,15 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Objects;
 
+@Data
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
 public class Event {
-    private int id;
+    private Integer id;
 
     @NotBlank(message = "Le nom de l'événement est requis")
     private String title;
@@ -28,7 +30,7 @@ public class Event {
     private LocalDateTime startTime;
 
     private LocalDateTime endTime;
-
+    
     private Status status;
 
     public enum Status {
@@ -44,6 +46,8 @@ public class Event {
     	this.startTime = startTime;
     	this.endTime = endTime;
     }
+    
+    private List<Artist> artists;
     
     @Override
     public boolean equals(Object obj) {

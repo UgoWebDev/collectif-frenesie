@@ -5,7 +5,6 @@ import java.util.Optional;
 
 import org.springframework.stereotype.Repository;
 
-import com.frenesie.collectif.model.Event;
 import com.frenesie.collectif.model.User;
 
 @Repository

@@ -16,7 +16,7 @@ import java.util.Objects;
 @AllArgsConstructor
 public class Artist {
 
-    private Integer id;
+    private Integer id;	
 
     @NotBlank(message = "Le nom est obligatoire")
     @Size(min = 2, max = 100, message = "Le nom de l'artiste doit avoir entre 2 et 100 caractères")

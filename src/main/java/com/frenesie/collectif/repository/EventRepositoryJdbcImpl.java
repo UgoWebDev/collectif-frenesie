@@ -12,7 +12,6 @@ import org.springframework.jdbc.core.namedparam.BeanPropertySqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Repository;
 
-import com.frenesie.collectif.model.Artist;
 import com.frenesie.collectif.model.Event;
 
 @Repository
@@ -27,15 +26,12 @@ public class EventRepositoryJdbcImpl implements EventRepository {
 		this.namedParameterJdbcTemplate = namedParameterJdbcTemplate;
 	}
 
-    public EventRepositoryJdbcImpl(JdbcTemplate jdbcTemplate) {
-        this.jdbcTemplate = jdbcTemplate;
-    }
 
     @Override
-    public void add(Event newEvent) {
-    	String sql = "INSERT INTO events (title, location, description, startTime, endTime, status)" + 
+    public void add(Event event) {
+    	String sql = "INSERT INTO events (title, location, description, start_time as startTime, end_time as endTime, status)" + 
     "VALUES (:title, :location, :description, :startTime, :endTime, :status)";
-    	namedParameterJdbcTemplate.update(sql, new BeanPropertySqlParameterSource(newEvent));
+    	namedParameterJdbcTemplate.update(sql, new BeanPropertySqlParameterSource(event));
     }
     
     @Override
@@ -54,6 +50,7 @@ public class EventRepositoryJdbcImpl implements EventRepository {
             event = jdbcTemplate.queryForObject(sql,
             		new BeanPropertyRowMapper<>(Event.class), id);
         } catch (DataAccessException exc) {
+			exc.printStackTrace();
 			logger.warn(exc.getMessage());
         }
 		return Optional.ofNullable(event);
@@ -62,11 +59,11 @@ public class EventRepositoryJdbcImpl implements EventRepository {
     @Override
     public void update(Event event) {
         String sql = "UPDATE events SET title=:title, location=:location, description=:description, "
-        		+ "startTime=:startTime, endTime=:endTime, status=:status "
+        		+ "start_time=:startTime, endd_time=:endTime, status=:status "
         		+ " WHERE id=:id";
         int nbRows = namedParameterJdbcTemplate.update(sql, new BeanPropertySqlParameterSource(event));
         if (nbRows !=1) {
-        	throw new RuntimeException("L'évènement n'a pas pu être mis à jour");
+        	throw new RuntimeException("L'évènement n'a pas pu être mis à jour" + event);
         }
     }
 
@@ -75,7 +72,7 @@ public class EventRepositoryJdbcImpl implements EventRepository {
         String sql = "DELETE FROM events WHERE id = ?";
         int nbRows = jdbcTemplate.update(sql, id);
         if(nbRows !=1) {
-        	throw new RuntimeException("L'évènement n'a pas pu être supprimé");
+        	throw new RuntimeException("L'évènement n'a pas pu être supprimé, id = " + id);
         }
     }
 }
